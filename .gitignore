@@ -41,5 +41,6 @@ app.*.map.json
 
 # Arquivos gerandos 
 *.g.dart
+*.mocks.dart
 .pub/
 .generated/
