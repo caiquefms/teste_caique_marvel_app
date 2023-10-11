@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'package:logger/logger.dart' as logLib;
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobx/mobx.dart';
 import '../../../core/infraestruture/datasource/http_client/api_datasource.dart';
 import '../../../core/infraestruture/local_storage/secure_local_storage.dart';
@@ -14,12 +17,17 @@ class CharacterDetailController = _CharacterDetailControllerBase
     with _$CharacterDetailController;
 
 abstract class _CharacterDetailControllerBase with Store {
-  final GetComicsUseCase _useCase = GetComicsUseCase(
-      CharacterDetailRepositoryImpl(
+  final GetComicsUseCase _useCase =
+      GetComicsUseCase(CharacterDetailRepositoryImpl(
           remoteDatasource: ApiDataSource(
               client: Dio(),
-              localStorage: SecureLocalStorage(),
-              logger: Logger())));
+              localStorage: SecureLocalStorage(Platform.isAndroid
+                  ? FlutterSecureStorage(
+                      aOptions:
+                          AndroidOptions(encryptedSharedPreferences: true),
+                    )
+                  : FlutterSecureStorage(iOptions: IOSOptions())),
+              logger: Logger(logLib.Logger()))));
 
   @observable
   StateResult _state = LoadingStateResult();

@@ -35,7 +35,7 @@ class ApiDataSource implements RemoteDataSource {
 
   @override
   Future<Either<Failure, dynamic>> get(
-      {required String path, fromJson, Map<String, dynamic>? params}) async {
+      {required String path, Map<String, dynamic>? params}) async {
     try {
       final result = await _client.get(path, queryParameters: params);
       return Right(result.data);

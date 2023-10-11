@@ -9,16 +9,16 @@ abstract class HomeRepository {
 }
 
 class HomeRepositoryImpl implements HomeRepository {
-  final RemoteDataSource _remoteDatasource;
+  final RemoteDataSource _remoteDataSource;
 
   HomeRepositoryImpl({
-    required RemoteDataSource remoteDatasource,
-  }) : _remoteDatasource = remoteDatasource;
+    required RemoteDataSource remoteDataSource,
+  }) : _remoteDataSource = remoteDataSource;
 
   @override
   Future<Either<Failure, CharacterDataWrapper>> getCharacters(
       {required int limit, required int offset}) async {
-    var data = await _remoteDatasource.get(path: "characters", params: {
+    var data = await _remoteDataSource.get(path: "characters", params: {
       'limit': limit,
       'offset': offset,
     });

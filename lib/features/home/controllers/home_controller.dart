@@ -1,9 +1,12 @@
+import 'dart:io';
+import 'package:logger/logger.dart' as logLib;
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobx/mobx.dart';
 import '../../../core/infraestruture/datasource/http_client/api_datasource.dart';
 import '../../../core/infraestruture/local_storage/secure_local_storage.dart';
 import '../../../core/infraestruture/log/logger.dart';
-import "../../../core/presentation/state/state_result.dart";
+import '../../../core/presentation/state/state_result.dart';
 import '../entity/character.dart';
 import '../usecases/get_character_usecase.dart';
 import '../repositories/home_repository.dart';
@@ -14,10 +17,14 @@ class HomeController = _HomeControllerBase with _$HomeController;
 
 abstract class _HomeControllerBase with Store {
   final GetCharacterUseCase _useCase = GetCharacterUseCase(HomeRepositoryImpl(
-      remoteDatasource: ApiDataSource(
+      remoteDataSource: ApiDataSource(
           client: Dio(),
-          localStorage: SecureLocalStorage(),
-          logger: Logger())));
+          localStorage: SecureLocalStorage(Platform.isAndroid
+              ? FlutterSecureStorage(
+                  aOptions: AndroidOptions(encryptedSharedPreferences: true),
+                )
+              : FlutterSecureStorage(iOptions: IOSOptions())),
+          logger: Logger(logLib.Logger()))));
 
   @observable
   StateResult _state = LoadingStateResult();

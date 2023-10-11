@@ -1,4 +1,4 @@
-import 'package:logger/logger.dart' as log;
+import 'package:logger/logger.dart' as logLib;
 
 abstract class Log {
   void debug(dynamic message, [dynamic error, StackTrace? stackTrace]);
@@ -10,9 +10,10 @@ abstract class Log {
 }
 
 class Logger implements Log {
-  List<String> messages = [];
+  final logLib.Logger logger;
+  Logger(this.logger);
 
-  final logger = log.Logger();
+  List<String> messages = [];
 
   @override
   void debug(dynamic message, [dynamic error, StackTrace? stackTrace]) {
